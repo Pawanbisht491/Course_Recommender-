@@ -1,0 +1,201 @@
+user_id,interest,skill_level,avg_score,time_spent,completed_courses
+1,Web Development,Intermediate,42,5,No
+2,Cybersecurity,Beginner,85,5,No
+3,Data Science,Advanced,47,3,No
+4,Web Development,Advanced,74,2,No
+5,Web Development,Advanced,93,5,Yes
+6,AI,Advanced,49,5,Yes
+7,Cybersecurity,Intermediate,56,5,No
+8,Cybersecurity,Intermediate,62,1,Yes
+9,AI,Advanced,90,5,Yes
+10,Web Development,Advanced,65,1,Yes
+11,Data Science,Intermediate,74,4,No
+12,Cybersecurity,Advanced,82,1,No
+13,Data Science,Beginner,91,1,Yes
+14,Data Science,Beginner,45,4,No
+15,Cybersecurity,Advanced,47,5,Yes
+16,Web Development,Intermediate,93,4,Yes
+17,Data Science,Intermediate,60,5,Yes
+18,Cybersecurity,Advanced,79,3,Yes
+19,AI,Beginner,75,3,Yes
+20,Data Science,Intermediate,42,1,Yes
+21,AI,Intermediate,87,2,No
+22,Cybersecurity,Intermediate,80,3,No
+23,Data Science,Beginner,88,5,No
+24,Cybersecurity,Beginner,70,3,Yes
+25,Web Development,Beginner,59,3,Yes
+26,Web Development,Beginner,95,1,Yes
+27,Web Development,Advanced,76,3,No
+28,Data Science,Intermediate,59,2,No
+29,Data Science,Intermediate,55,4,No
+30,Data Science,Beginner,90,4,No
+31,Web Development,Intermediate,48,3,No
+32,Web Development,Beginner,69,4,Yes
+33,Cybersecurity,Intermediate,69,3,No
+34,Web Development,Advanced,73,1,Yes
+35,Data Science,Intermediate,89,4,No
+36,AI,Intermediate,51,4,No
+37,Cybersecurity,Advanced,92,2,Yes
+38,Web Development,Beginner,94,1,Yes
+39,Cybersecurity,Intermediate,79,1,Yes
+40,AI,Intermediate,65,4,No
+41,Data Science,Advanced,59,2,No
+42,AI,Advanced,42,1,No
+43,Web Development,Beginner,41,4,Yes
+44,Web Development,Intermediate,89,3,No
+45,Web Development,Intermediate,89,5,No
+46,Web Development,Advanced,63,1,No
+47,Web Development,Advanced,83,5,No
+48,Web Development,Beginner,92,4,Yes
+49,AI,Advanced,51,2,No
+50,Data Science,Intermediate,44,2,No
+51,AI,Intermediate,80,3,Yes
+52,Cybersecurity,Intermediate,85,4,No
+53,Data Science,Advanced,41,3,Yes
+54,Cybersecurity,Intermediate,53,5,No
+55,Data Science,Advanced,89,1,No
+56,Cybersecurity,Advanced,85,4,Yes
+57,Web Development,Beginner,74,3,No
+58,Web Development,Advanced,53,5,Yes
+59,Web Development,Beginner,68,1,Yes
+60,Data Science,Beginner,68,1,Yes
+61,Data Science,Advanced,58,2,No
+62,Cybersecurity,Beginner,51,1,No
+63,AI,Beginner,81,5,No
+64,AI,Beginner,43,4,Yes
+65,Data Science,Intermediate,83,2,Yes
+66,AI,Advanced,87,4,Yes
+67,AI,Intermediate,40,2,No
+68,Data Science,Advanced,69,3,Yes
+69,AI,Intermediate,59,4,No
+70,Data Science,Beginner,84,1,No
+71,Data Science,Advanced,69,4,Yes
+72,AI,Intermediate,83,1,No
+73,Web Development,Beginner,41,3,Yes
+74,Web Development,Advanced,44,2,Yes
+75,Cybersecurity,Beginner,54,4,No
+76,Web Development,Intermediate,82,4,No
+77,Data Science,Intermediate,72,4,No
+78,Web Development,Intermediate,77,2,No
+79,Cybersecurity,Advanced,81,4,No
+80,Data Science,Intermediate,85,2,No
+81,Web Development,Intermediate,80,2,Yes
+82,Data Science,Advanced,64,4,No
+83,Web Development,Advanced,76,4,No
+84,Cybersecurity,Beginner,44,4,No
+85,AI,Advanced,87,3,Yes
+86,AI,Intermediate,79,4,No
+87,Data Science,Beginner,40,5,Yes
+88,Data Science,Advanced,79,5,Yes
+89,Cybersecurity,Advanced,66,4,Yes
+90,Cybersecurity,Intermediate,40,1,No
+91,Cybersecurity,Beginner,76,5,Yes
+92,Data Science,Advanced,42,3,Yes
+93,Data Science,Intermediate,75,3,No
+94,AI,Advanced,64,3,No
+95,AI,Beginner,61,5,Yes
+96,AI,Intermediate,41,5,Yes
+97,AI,Advanced,93,4,Yes
+98,Cybersecurity,Intermediate,87,5,No
+99,Cybersecurity,Advanced,51,1,Yes
+100,Cybersecurity,Beginner,57,5,Yes
+101,Cybersecurity,Beginner,43,4,Yes
+102,AI,Advanced,88,4,Yes
+103,Data Science,Advanced,92,4,No
+104,Web Development,Advanced,61,4,No
+105,Web Development,Advanced,43,5,No
+106,Data Science,Beginner,85,1,No
+107,Cybersecurity,Beginner,56,4,Yes
+108,Cybersecurity,Advanced,85,3,No
+109,Web Development,Beginner,64,4,No
+110,Data Science,Intermediate,84,4,No
+111,AI,Advanced,44,1,No
+112,Web Development,Advanced,84,3,No
+113,Cybersecurity,Beginner,94,1,No
+114,Cybersecurity,Beginner,62,2,No
+115,Data Science,Beginner,87,3,No
+116,AI,Beginner,89,1,No
+117,Data Science,Advanced,40,4,No
+118,Web Development,Intermediate,52,1,Yes
+119,Data Science,Beginner,43,3,Yes
+120,Cybersecurity,Advanced,55,1,Yes
+121,Web Development,Beginner,65,5,No
+122,Cybersecurity,Intermediate,86,5,No
+123,Data Science,Intermediate,86,2,No
+124,Cybersecurity,Advanced,80,2,Yes
+125,AI,Intermediate,80,4,Yes
+126,AI,Beginner,46,3,No
+127,Cybersecurity,Beginner,82,5,Yes
+128,AI,Beginner,69,1,No
+129,Cybersecurity,Beginner,81,3,No
+130,Web Development,Beginner,50,4,Yes
+131,Cybersecurity,Intermediate,55,3,Yes
+132,Cybersecurity,Beginner,73,2,No
+133,Web Development,Advanced,80,3,No
+134,Web Development,Intermediate,82,3,No
+135,AI,Advanced,63,1,No
+136,Web Development,Advanced,77,4,Yes
+137,Data Science,Advanced,88,3,No
+138,Web Development,Intermediate,82,1,Yes
+139,Cybersecurity,Intermediate,67,5,No
+140,Data Science,Beginner,52,4,Yes
+141,Cybersecurity,Advanced,89,1,No
+142,Cybersecurity,Beginner,57,1,No
+143,Data Science,Intermediate,63,1,No
+144,Cybersecurity,Intermediate,94,2,Yes
+145,Web Development,Intermediate,92,2,Yes
+146,AI,Advanced,45,1,Yes
+147,AI,Advanced,77,2,No
+148,Data Science,Advanced,79,4,Yes
+149,Data Science,Beginner,68,3,No
+150,AI,Intermediate,83,4,Yes
+151,Cybersecurity,Advanced,89,5,No
+152,AI,Intermediate,94,3,Yes
+153,AI,Advanced,42,1,No
+154,AI,Intermediate,54,5,Yes
+155,AI,Advanced,46,3,Yes
+156,Cybersecurity,Intermediate,61,1,Yes
+157,Cybersecurity,Intermediate,51,4,Yes
+158,Web Development,Advanced,40,5,Yes
+159,Cybersecurity,Intermediate,59,4,Yes
+160,AI,Beginner,70,2,No
+161,AI,Advanced,61,5,Yes
+162,Data Science,Beginner,79,3,Yes
+163,Cybersecurity,Intermediate,67,2,No
+164,Web Development,Intermediate,44,4,No
+165,AI,Beginner,94,5,No
+166,Web Development,Advanced,68,4,No
+167,Cybersecurity,Advanced,79,1,No
+168,Web Development,Beginner,73,5,Yes
+169,Web Development,Beginner,88,2,Yes
+170,Data Science,Intermediate,51,1,Yes
+171,Web Development,Advanced,86,5,No
+172,Cybersecurity,Advanced,45,1,Yes
+173,AI,Intermediate,67,4,No
+174,Data Science,Advanced,80,2,No
+175,AI,Beginner,75,1,No
+176,Web Development,Intermediate,45,4,Yes
+177,Cybersecurity,Advanced,70,2,No
+178,AI,Beginner,47,4,No
+179,Web Development,Advanced,76,4,No
+180,Web Development,Intermediate,40,2,Yes
+181,Cybersecurity,Advanced,71,3,Yes
+182,Data Science,Advanced,82,1,No
+183,Cybersecurity,Intermediate,42,5,Yes
+184,AI,Intermediate,51,5,No
+185,Web Development,Advanced,43,1,No
+186,Data Science,Beginner,57,5,Yes
+187,Cybersecurity,Beginner,93,2,No
+188,AI,Advanced,53,5,Yes
+189,Data Science,Intermediate,75,1,No
+190,Cybersecurity,Advanced,66,1,Yes
+191,Data Science,Advanced,74,3,Yes
+192,Cybersecurity,Advanced,67,2,No
+193,AI,Beginner,61,2,Yes
+194,Data Science,Beginner,76,3,Yes
+195,Web Development,Advanced,78,3,No
+196,Cybersecurity,Advanced,86,2,Yes
+197,Data Science,Advanced,89,4,Yes
+198,Web Development,Beginner,58,1,Yes
+199,Web Development,Intermediate,89,4,No
+200,AI,Advanced,89,1,Yes
