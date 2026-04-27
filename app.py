@@ -21,51 +21,37 @@ except Exception as e:
 course_names = courses_df['course_name'].values.tolist()
 course_url_dict = courses_df.set_index('course_name')['course_url'].to_dict()
 
-def recommend_with_inputs(user):
-    recommendations = []
 
-    for _, course in courses_df.iterrows():
-        score = 0
+def filter_courses(user):
+    filtered_indices = []
 
-        # 1. Interest match
-        if user['interest'].lower() in course['course_name'].lower():
-            score += 0.4
+    for idx in range(len(courses_df)):
+        difficulty = courses_df.iloc[idx]['difficulty_level']
+        keep = True
 
-        # 2. Skill level match
-        if user['skill_level'].lower() in course['course_name'].lower():
-            score += 0.2
+        # Skill level filter - proper matching
+        if user['skill_level'] == "Intermediate" and difficulty == "Beginner":
+            keep = False
+        if user['skill_level'] == "Advanced" and difficulty in ["Beginner", "Intermediate"]:
+            keep = False
 
-        # 3. Performance-based
-        if user['avg_score'] < 60 and 'Beginner' in course['course_name']:
-            score += 0.2
-        elif user['avg_score'] > 75 and 'Advanced' in course['course_name']:
-            score += 0.2
+        # Score-based filtering
+        if user['avg_score'] > 75 and difficulty == "Beginner":
+            keep = False
+        if user['avg_score'] < 50 and difficulty == "Advanced":
+            keep = False
 
-        # 4. Completion logic (NEW)
-        if user['completed'] == "no":
-            score += 0.1   # recommend similar courses
-        else:
-            score -= 0.05  # avoid repetition
+        if keep:
+            filtered_indices.append(idx)
 
-        # 5. Time spent logic (NEW)
-        if user['time_spent'] < 2:
-            score += 0.1  # suggest short/easy courses
-        elif user['time_spent'] > 5:
-            score += 0.1  # suggest deeper courses
-
-        recommendations.append((course['course_name'], course['course_url'], score))
-
-    recommendations = sorted(recommendations, key=lambda x: x[2], reverse=True)
-
-    return [{"name": r[0], "url": r[1]} for r in recommendations[:6]]
+    return filtered_indices
 
 
 def recommend_with_similarity(user_input):
-    course_name = user_input['interest']
+    course_name = user_input['interest'] + " " + user_input['skill_level']
 
     if course_name not in course_names:
-        # fallback: partial match
-        matches = [c for c in course_names if course_name.lower() in c.lower()]
+        matches = [c for c in course_names if user_input['interest'].lower() in c.lower()]
         if not matches:
             return []
         course_name = matches[0]
@@ -73,33 +59,65 @@ def recommend_with_similarity(user_input):
     index = course_names.index(course_name)
     distances = similarity[index]
 
-    # Get top similar courses
-    course_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:7]
+    # Valid courses filter lagayein
+    valid_indices = filter_courses(user_input)
+
+    filtered = [(i, distances[i]) for i in valid_indices]
+
+    # Sort karein
+    course_list = sorted(filtered, key=lambda x: x[1], reverse=True)[:20]
 
     recommendations = []
     for i in course_list:
-        name = courses_df.iloc[i[0]].course_name
-        url = course_url_dict[name]
-        recommendations.append({"name": name, "url": url})
+        row = courses_df.iloc[i[0]]
+        # Difficulty bhi aage pass karein
+        recommendations.append({
+            "name": row.course_name, 
+            "url": row.course_url,
+            "difficulty": row.difficulty_level
+        })
 
     return recommendations
 
 
 def hybrid_recommendation(user):
-    ml_score = recommend_with_similarity(user)
-    rule_score = recommend_with_inputs(user)
+    ml_recs = recommend_with_similarity(user)
+    scored = []
 
-    combined = (0.6*ml_score) + (0.4*rule_score)
+    for idx, course in enumerate(ml_recs):
+        name = course['name']
+        diff = course['difficulty']
+        score = 0
 
-    # Remove duplicates
-    seen = set()
-    final = []
-    for course in combined:
-        if course['name'] not in seen:
-            final.append(course)
-            seen.add(course['name'])
+        # Base ML ranking weight
+        score += (20 - idx)
 
-    return final[:6]
+        # 1. Skill match boost (ab ye 100% sahi kaam karega)
+        if user['skill_level'] == diff:
+            score += 8
+
+        # 2. Performance logic
+        if user['avg_score'] < 60 and diff == "Beginner":
+            score += 6
+        elif user['avg_score'] > 75 and diff == "Advanced":
+            score += 6
+
+        # 3. Time-based tuning (naam mein 'Short' dhoondhna reliable nahi tha)
+        if user['time_spent'] < 2:
+            score += 3
+        elif user['time_spent'] > 4:
+            score += 6
+
+        # 4. Completion behavior
+        if user['completed'] == "no":
+            score += 4
+
+        scored.append((course, score))
+
+    # Sort based on final dynamic scores
+    scored = sorted(scored, key=lambda x: x[1], reverse=True)
+
+    return [item[0] for item in scored[:6]]
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -116,7 +134,6 @@ def index():
         }
 
         recommended_courses = hybrid_recommendation(user)
-
     return render_template(
         'index.html',
         recommendations=recommended_courses
