@@ -86,10 +86,10 @@ def recommend_with_similarity(user_input):
 
 
 def hybrid_recommendation(user):
-    ml_recs = recommend_with_similarity(user)
-    rule_recs = recommend_with_inputs(user)
+    ml_score = recommend_with_similarity(user)
+    rule_score = recommend_with_inputs(user)
 
-    combined = ml_recs + rule_recs
+    combined = (0.6*ml_score) + (0.4*rule_score)
 
     # Remove duplicates
     seen = set()
