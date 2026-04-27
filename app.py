@@ -59,6 +59,49 @@ def recommend_with_inputs(user):
 
     return [{"name": r[0], "url": r[1]} for r in recommendations[:6]]
 
+
+def recommend_with_similarity(user_input):
+    course_name = user_input['interest']
+
+    if course_name not in course_names:
+        # fallback: partial match
+        matches = [c for c in course_names if course_name.lower() in c.lower()]
+        if not matches:
+            return []
+        course_name = matches[0]
+
+    index = course_names.index(course_name)
+    distances = similarity[index]
+
+    # Get top similar courses
+    course_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:7]
+
+    recommendations = []
+    for i in course_list:
+        name = courses_df.iloc[i[0]].course_name
+        url = course_url_dict[name]
+        recommendations.append({"name": name, "url": url})
+
+    return recommendations
+
+
+def hybrid_recommendation(user):
+    ml_recs = recommend_with_similarity(user)
+    rule_recs = recommend_with_inputs(user)
+
+    combined = ml_recs + rule_recs
+
+    # Remove duplicates
+    seen = set()
+    final = []
+    for course in combined:
+        if course['name'] not in seen:
+            final.append(course)
+            seen.add(course['name'])
+
+    return final[:6]
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     recommended_courses = []
@@ -72,7 +115,7 @@ def index():
             "time_spent": float(request.form['time_spent'])
         }
 
-        recommended_courses = recommend_with_inputs(user)
+        recommended_courses = hybrid_recommendation(user)
 
     return render_template(
         'index.html',
