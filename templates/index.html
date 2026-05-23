@@ -3,73 +3,641 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Recommendation System</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>LearnPath — Course Recommendation System</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --surface2: #1c2333;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #7d8590;
+            --accent: #58a6ff;
+            --accent2: #bc8cff;
+            --green: #3fb950;
+            --orange: #f0883e;
+            --red: #f85149;
+            --indigo: #818cf8;
+            --card-glow: 0 0 0 1px var(--border), 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── TOP BANNER ── */
+        .top-bar {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .logo span { font-style: italic; }
+        .badge-group2 { display: flex; gap: 10px; align-items: center; }
+        .badge {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        .badge-blue { border-color: var(--accent); color: var(--accent); }
+
+        /* ── LAYOUT ── */
+        .layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 0;
+            min-height: calc(100vh - 66px);
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 32px 28px;
+        }
+        .sidebar-title {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .form-group { margin-bottom: 18px; }
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 8px;
+        }
+        input, select {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.92rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            appearance: none;
+        }
+        input:focus, select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(88,166,255,0.15);
+        }
+        input::placeholder { color: var(--text-muted); }
+
+        /* Skill level pills */
+        .pill-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .pill-input { display: none; }
+        .pill-label {
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .pill-label:hover { border-color: var(--accent); color: var(--accent); }
+        .pill-input:checked + .pill-label {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            color: #fff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s, transform 0.15s;
+            letter-spacing: 0.02em;
+        }
+        .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .submit-btn:active { transform: translateY(0); }
+
+        /* ── MAIN CONTENT ── */
+        .main {
+            padding: 32px 36px;
+            overflow-y: auto;
+        }
+
+        .welcome-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+            gap: 16px;
+        }
+        .welcome-icon {
+            font-size: 4rem;
+            opacity: 0.3;
+        }
+        .welcome-state h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            color: var(--text-muted);
+        }
+        .welcome-state p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 380px;
+            line-height: 1.6;
+        }
+
+        /* ── USER ANALYTICS CARD ── */
+        .analytics-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .analytics-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+        }
+        .analytics-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .analytics-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .analytics-stat {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+        }
+        .stat-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .stat-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .stat-value.green { color: var(--green); }
+        .stat-value.orange { color: var(--orange); }
+        .stat-value.blue { color: var(--accent); }
+
+        .insight-box {
+            background: rgba(88,166,255,0.07);
+            border: 1px solid rgba(88,166,255,0.2);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.87rem;
+            color: var(--accent);
+            line-height: 1.5;
+        }
+
+        /* ── SECTION HEADER ── */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+        }
+        .result-count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        /* ── LEARNING PATH TRACK ── */
+        .path-track {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        .path-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .path-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .path-dot.indigo { background: rgba(129,140,248,0.2); color: var(--indigo); border: 2px solid var(--indigo); }
+        .path-dot.blue { background: rgba(88,166,255,0.2); color: var(--accent); border: 2px solid var(--accent); }
+        .path-dot.purple { background: rgba(188,140,255,0.2); color: var(--accent2); border: 2px solid var(--accent2); }
+        .path-line {
+            width: 40px;
+            height: 2px;
+            background: var(--border);
+        }
+
+        /* ── COURSE CARDS ── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+        }
+
+        .course-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .course-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            gap: 10px;
+        }
+
+        .path-chip {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+        .chip-indigo { background: rgba(129,140,248,0.15); color: var(--indigo); border: 1px solid rgba(129,140,248,0.3); }
+        .chip-blue   { background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+        .chip-purple { background: rgba(188,140,255,0.15); color: var(--accent2); border: 1px solid rgba(188,140,255,0.3); }
+
+        /* Match ring */
+        .match-ring {
+            position: relative;
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+        }
+        .match-ring svg {
+            transform: rotate(-90deg);
+            width: 48px;
+            height: 48px;
+        }
+        .ring-bg { fill: none; stroke: var(--border); stroke-width: 4; }
+        .ring-fill { fill: none; stroke: var(--accent); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
+        .match-label {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .course-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.45;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+        .course-name a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .course-name a:hover { color: var(--accent); }
+
+        .diff-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+        }
+        .diff-Beginner     { background: rgba(63,185,80,0.12); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+        .diff-Intermediate { background: rgba(88,166,255,0.12); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+        .diff-Advanced     { background: rgba(188,140,255,0.12); color: var(--accent2); border: 1px solid rgba(188,140,255,0.3); }
+
+        /* Why tags */
+        .why-section {
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+            margin-top: 4px;
+        }
+        .why-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .why-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .why-tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-muted);
+        }
+
+        /* ── NO RESULTS ── */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .no-results p { font-size: 1rem; margin-top: 12px; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .layout { grid-template-columns: 1fr; }
+            .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+            .analytics-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-r from-blue-50 via-white to-purple-50 min-h-screen py-10 px-4">
-    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
-        <div class="bg-gradient-to-r from-blue-600 to-purple-600 py-8 px-6 text-center text-white">
-            <h2 class="text-4xl font-bold tracking-wide">🔥 Course Recommendation System</h2>
-            <p class="text-md mt-2 font-light">Project by <strong>Group 3</strong></p>
-        </div>
+<body>
 
-        <div class="p-8">
-            <form method="POST" class="mb-10 space-y-4">
-
-                <label class="block text-gray-700 text-lg font-semibold mb-3">
-                    👤 Enter User Details:
-                </label>
-
-                <input type="text" name="interest" placeholder="Enter Interest (e.g. Python, ML)"
-                    class="w-full p-3 border rounded-xl" required>
-
-                <select name="skill_level" class="w-full p-3 border rounded-xl">
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
-                </select>
-
-                <input type="number" name="avg_score" placeholder="Quiz Score (0-100)"
-                    class="w-full p-3 border rounded-xl" required>
-
-                <select name="completed" class="w-full p-3 border rounded-xl">
-                    <option value="yes">Completed Courses</option>
-                    <option value="no">Not Completed</option>
-                </select>
-
-                <input type="number" step="0.1" name="time_spent" placeholder="Time Spent (hours/day)"
-                    class="w-full p-3 border rounded-xl" required>
-
-                <button type="submit"
-                    class="w-full bg-purple-500 text-white py-3 rounded-xl">
-                    🎯 Get Recommendations
-                </button>
-
-            </form>
-
-            {% if recommendations %}
-                <div class="bg-gray-50 rounded-xl p-6 shadow-inner">
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">🎓 Recommended Courses:</h3>
-
-                    {% if not recommendations %}
-                        <p class="text-red-500 font-semibold">No recommendations found for this course.</p>
-                    {% else %}
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {% for recommendation in recommendations %}
-                                <div class="bg-white border border-gray-200 p-5 rounded-lg shadow hover:shadow-lg transition duration-200">
-                                    <h4 class="text-lg font-bold text-blue-600 mb-2">
-                                        <a href="{{ recommendation.url }}" target="_blank" class="hover:underline">
-                                            {{ recommendation.name }}
-                                        </a>
-                                    </h4>
-                                    <p class="text-sm text-gray-500">Click to explore this course.</p>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-            {% endif %}
-        </div>
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="logo">Learn<span>Path</span></div>
+    <div class="badge-group2">
+{#        <span class="badge">Learning Analytics</span>#}
+        <span class="badge badge-blue">Group 3</span>
     </div>
+</div>
+
+<div class="layout">
+
+    <!-- ── SIDEBAR FORM ── -->
+    <aside class="sidebar">
+        <div class="sidebar-title">Learner Profile</div>
+
+        <form method="POST">
+
+            <div class="form-group">
+                <label>Interest / Topic</label>
+                <input type="text" name="interest"
+                    placeholder="e.g. Python, Machine Learning…"
+                    value="{{ user.interest if user else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Skill Level</label>
+                <div class="pill-group">
+                    {% for level in ['Beginner', 'Intermediate', 'Advanced'] %}
+                    <input class="pill-input" type="radio" name="skill_level"
+                        id="skill_{{ level }}" value="{{ level }}"
+                        {% if user and user.skill_level == level %}checked{% elif not user and level == 'Beginner' %}checked{% endif %}>
+                    <label class="pill-label" for="skill_{{ level }}">{{ level }}</label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Quiz / Assessment Score (0–100)</label>
+                <input type="number" name="avg_score" min="0" max="100"
+                    placeholder="e.g. 72"
+                    value="{{ user.avg_score | int if user else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Course Completion Behaviour</label>
+                <select name="completed">
+                    <option value="yes" {% if user and user.completed == 'yes' %}selected{% endif %}>
+                        ✅ Usually Completes Courses
+                    </option>
+                    <option value="no" {% if user and user.completed == 'no' %}selected{% endif %}>
+                        ⚠️ Often Drops Out
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Daily Study Time (hours)</label>
+                <input type="number" step="0.5" name="time_spent" min="0.5" max="12"
+                    placeholder="e.g. 2.5"
+                    value="{{ user.time_spent if user else '' }}" required>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                🔍 &nbsp; Get Recommendations
+            </button>
+
+        </form>
+    </aside>
+
+    <!-- ── MAIN PANEL ── -->
+    <main class="main">
+
+        {% if not user %}
+        <!-- Welcome state -->
+        <div class="welcome-state">
+            <div class="welcome-icon">🎓</div>
+            <h2>Your Learning Journey Starts Here</h2>
+            <p>Fill in your learner profile on the left to receive personalised, data-driven course recommendations powered by content similarity and learning analytics.</p>
+        </div>
+
+        {% else %}
+
+        <!-- IMPROVEMENT 1: User Analytics Summary -->
+        {% if user_analytics %}
+        <div class="analytics-card">
+            <div class="analytics-header">
+                <span class="analytics-title">📊 Learner Analytics Profile</span>
+            </div>
+            <div class="analytics-grid">
+                <div class="analytics-stat">
+                    <div class="stat-label">Performance</div>
+                    <div class="stat-value {{ user_analytics.performance_color }}">
+                        {{ user_analytics.performance_tier }}
+                    </div>
+                </div>
+                <div class="analytics-stat">
+                    <div class="stat-label">Engagement</div>
+                    <div class="stat-value blue">{{ user_analytics.engagement }}</div>
+                </div>
+                <div class="analytics-stat">
+                    <div class="stat-label">Completion Pattern</div>
+                    <div class="stat-value">{{ user_analytics.completion_status }}</div>
+                </div>
+            </div>
+            <div class="insight-box">{{ user_analytics.insight }}</div>
+        </div>
+        {% endif %}
+
+        <!-- Results header -->
+        <div class="section-header">
+            <h2 class="section-title">Recommended Courses</h2>
+            <span class="result-count">{{ recommendations | length }} results for "{{ user.interest }}"</span>
+        </div>
+
+        {% if recommendations %}
+
+        <!-- IMPROVEMENT 4: Learning Path Track -->
+        <div class="path-track">
+            {% for rec in recommendations %}
+            <div class="path-step">
+                <div class="path-dot {{ rec.path_color }}">{{ rec.rank }}</div>
+                {% if not loop.last %}
+                <div class="path-line"></div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Course Cards -->
+        <div class="cards-grid">
+            {% for rec in recommendations %}
+            <div class="course-card">
+
+                <div class="card-top">
+                    <!-- Path label chip -->
+                    <span class="path-chip chip-{{ rec.path_color }}">
+                        {{ rec.path_label }}
+                    </span>
+
+                    <!-- IMPROVEMENT 3: Match % Ring -->
+                    <div class="match-ring">
+                        <svg viewBox="0 0 48 48">
+                            <circle class="ring-bg" cx="24" cy="24" r="20"/>
+                            <circle class="ring-fill" cx="24" cy="24" r="20"
+                                stroke-dasharray="125.6"
+                                stroke-dashoffset="{{ 125.6 - (125.6 * rec.match_percent / 100) }}"
+                            />
+                        </svg>
+                        <div class="match-label">{{ rec.match_percent }}%</div>
+                    </div>
+                </div>
+
+                <!-- Course Name -->
+                <div class="course-name">
+                    <a href="{{ rec.url }}" target="_blank" rel="noopener">
+                        {{ rec.name }}
+                    </a>
+                </div>
+
+                <!-- Difficulty Badge -->
+                <span class="diff-badge diff-{{ rec.difficulty }}">
+                    {% if rec.difficulty == 'Beginner' %}🟢{% elif rec.difficulty == 'Intermediate' %}🔵{% else %}🟣{% endif %}
+                    {{ rec.difficulty }}
+                </span>
+
+                <!-- IMPROVEMENT 2: Why Recommended Tags -->
+                <div class="why-section">
+                    <div class="why-title">Why recommended</div>
+                    <div class="why-tags">
+                        {% for tag in rec.why_tags %}
+                        <span class="why-tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <div class="no-results">
+            <div style="font-size:2.5rem">🔍</div>
+            <p>No courses found for "<strong>{{ user.interest }}</strong>" at {{ user.skill_level }} level.<br>
+            Try a different topic or adjust your skill level.</p>
+        </div>
+        {% endif %}
+
+        {% endif %}
+    </main>
+</div>
+
 </body>
 </html>
